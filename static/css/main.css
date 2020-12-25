@@ -1,0 +1,76 @@
+.queue_table{
+
+}
+.footer{
+    width: 100%;
+    text-align: center;
+    border: 1px solid #fefefe;
+}
+.color-white{
+    color: #FFFFFF;
+}
+.table td, .table th{
+    vertical-align: middle;
+}
+/*
+.update_table{
+    position: fixed;
+    left: 10%;
+    top: 0px;
+}
+*/
+.configBlock{
+    position: fixed;
+    padding: 1rem;
+    right: -14px;
+    top: 3.5rem;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    transition: transform 1s ease;
+    z-index: 99;
+}
+.statusZone{
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 5px;
+    z-index: 99;
+}
+.statusZoneTitle{
+    color: #5A5A5A;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.statusList{
+    padding-top: 4px;
+    margin-top: 7px;
+    border-top:1px solid #CCCCCC;
+}
+.step_next_title {
+    font-weight: bold;
+}
+.step_next_join_title{
+    font-size: 1rem;
+    font-weight: bold;
+}
+.img_transform {
+  transition: transform 0.5s ease;
+}
+.listGateTextSupplerName{
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+.rotate180 {
+  transform: rotate(180deg);
+}
+​.animate {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}

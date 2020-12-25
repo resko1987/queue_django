@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% load static %}
+    <meta charset="UTF-8"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <title>{{ title }}</title>
+
+    <script src="{% static "/js/jquery-3.5.1.min.js" %}"></script>
+    <script src="{% static "/js/plugins/jquery-ui/jquery-ui.min.js" %}"></script>
+    <link rel="stylesheet" href="{% static "/js/plugins/jquery-ui/jquery-ui.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "/js/plugins/jquery-ui/jquery-ui.theme.css" %}?v={{ rand }}"/>
+
+    <link rel="stylesheet" href="{% static "/js/plugins/bootstrap/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "/js/plugins/bootstrap/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "/css/main.css" %}"/>
+    <script src="{% static "/js/plugins/bootstrap/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "/js/plugins/bootstrap/js/moment.js" %}"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="{% static "/js/plugins/bootstrap/js/bootstrap-datetimepicker.min.js" %}"></script>
+    <script src="{% static "/js/plugins/jquery.barcode.js" %}"></script>
+    <script src="{% static "/js/plugins/chosen/chosen.jquery.js" %}"></script>
+    <link href="{% static "/js/plugins/chosen/chosen.min.css" %}" rel="stylesheet">
+    <script src="{% static "/js/init.js" %}?v={{ rand }}"></script>
+
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="shadow-sm p-3 mb-4 bg-white">
+                <div class="float-left font-weight-bold" style="font-size: 2rem;">
+                    {{ title }}
+                </div>
+                <div class="float-right mt-2">
+                    <ul class="nav d-flex align-items-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Очередь поставщиков</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/suppliers/">Зона приемки</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="shadow-sm p-3 mb-4 bg-white">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="shadow-sm p-2 bg-white">
+                <div class="footer">ООО Самбери © {{ now_year }} </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
