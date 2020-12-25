@@ -7,6 +7,7 @@ class gates(models.Model):
     supplername = models.CharField(max_length=80)
     queue_id = models.IntegerField(default=0)
     queue_num = models.CharField(max_length=10)
+    message = models.CharField(max_length=255, default='')
     showdisplay = models.IntegerField(default=0)
     donotautomatic = models.IntegerField(default=0)
     priority = models.IntegerField(default=10)

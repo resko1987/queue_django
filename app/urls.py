@@ -23,6 +23,7 @@ from queue_suppliers.views import suppliers
 from queue_suppliers.views import index
 from queue_suppliers.views import post
 from queue_suppliers.views import print_barcodes
+from queue_suppliers.views import display_get_gates
 #from queue_config.views import register_queue
 #from django.http import HttpResponse
 
@@ -36,6 +37,7 @@ urlpatterns = [
     url(r'post/', post),
     url(r'suppliers/', suppliers),
     url(r'print_barcodes/', print_barcodes),
+    url(r'display_get_gates/', display_get_gates),
     url(r'^$', index),
 ]
 # TemplateView.as_view(template_name="suppliers.html")

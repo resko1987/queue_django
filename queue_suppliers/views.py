@@ -111,6 +111,35 @@ def set_db_queue_suppliers(elm_id, status, avto_number):
     except Exception:
         return 1
 
+# Вспомогательная функция, для получения данных
+def dictfetchall(cursor):
+    "Returns all rows from a cursor as a dict"
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
+# Отчистить старые данные ворот
+def clear_old_suppliers():
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+           "select g.*, "
+           "(select qq.id from queue_suppliers_queue_suppliers qq "
+           "where qq.id=g.queue_id and qq.created_date<current_date) as queue_suppliers_id "
+           "from gates_gates g",
+                      []
+                      )
+        edata = dictfetchall(cursor)
+
+        for elm in edata:
+            if(elm['queue_suppliers_id'] is not None):
+                set_db_gates_gates(elm['id'], 0, '', '', 0)
+
+        return 0
+    except Exception:
+        return 1
 
 
 def post(request):
@@ -235,6 +264,9 @@ def post(request):
 
     # Получение данных по воротам
     if 'get_gates' in request.GET:
+
+        clear_old_suppliers()
+
         try:
             edata = gates.objects.all().order_by('gatename')
             data = serializers.serialize('json', edata)
@@ -244,7 +276,6 @@ def post(request):
 
     # Добавление ворот
     if 'add_gates' in request.GET:
-        print('add_gates')
         try:
             objs_count = gates.objects.count()
             objs_count = objs_count + 1;
@@ -269,7 +300,6 @@ def post(request):
             data = {'error': '1', 'str': 'Ошибка в запросе'}
 
     if 'post_next_step' in request.GET:
-        print('post_next_step')
         try:
             elm_id = request.GET['elm_id']
             supplername = request.GET['objname']
@@ -277,7 +307,6 @@ def post(request):
             elm_status = request.GET['elm_status']
             setGatesSelect = int(request.GET['setGatesSelect'])
 
-            print('elm_id: ' + elm_id)
             # Если не передали номер ворот то автоматически назначим
             gate_id = 0
             if(setGatesSelect == 0):
@@ -316,7 +345,6 @@ def post(request):
             data = {'error': '1', 'str': 'Ошибка в запросе'}
 
     if 'post_step_set' in request.GET:
-        print('post_step_set')
         try:
             elm_id = request.GET['elm_id']
             elm_status = int(request.GET['elm_status'])
@@ -329,14 +357,14 @@ def post(request):
                 if (int(elm.queue_id) == int(elm_id)):
                     gate_id = elm.id
                     break
-            print('2gate_id: ' + str(gate_id))
+
             process = set_db_queue_suppliers(elm_id, elm_status, '')
             if (process == 0 and (elm_status == 4 or elm_status == 0)):
 
                 if (set_db_gates_gates(gate_id, 0, '', '', 0) > 0):
                     process = 3
 
-            print('process end: ' + str(process))
+
             if(process==0):
                 data = {'error': '0', 'str': 'Успешно выполнено'}
             if(process==2):
@@ -349,3 +377,43 @@ def post(request):
             data = {'error': '1', 'str': 'Ошибка в запросе'}
 
     return JsonResponse(data, safe=False)
+
+
+def display_get_gates(request):
+    try:
+        cursor = connection.cursor()
+        cursor.execute(
+           "select "
+           "g.status as STATUS, "
+           "g.message as MESSAGE, "
+           "g.gatename as NAMEZONE_REAL, "
+           "g.queue_id as GATE_QUEUE_ID, "
+           "g.queue_num as QUEUE_NUM, "
+           "g.id as IDRECEIVINGZONE, "
+           "'В-' || substring(g.gatename, char_length(g.gatename) ) as NAMEZONE, "
+           "'' as ADVENT, "
+           "'' as SHOPID, "
+           "g.supplername as SUPPLER_NAME "
+           "from gates_gates g",
+                      []
+                      )
+        edata = dictfetchall(cursor)
+
+        # Приводим данные в нужный вид
+        for elm in edata:
+            if (len(elm['message']) == 0):
+                elm['message'] = None
+            if (elm['gate_queue_id'] == 0):
+                elm['gate_queue_id'] = None
+            if(len(elm['queue_num']) == 0):
+                elm['queue_num'] = '—'
+            if (len(elm['advent']) == 0):
+                elm['advent'] = None
+            elm['shopid'] = 0
+            if (len(elm['suppler_name']) == 0):
+                elm['suppler_name'] = None
+
+        return JsonResponse(edata, safe=False)
+    except Exception:
+        data = {'error': '1', 'str': 'Ошибка в запросе'}
+        return JsonResponse(data, safe=False)
